@@ -12,24 +12,25 @@ import java.io.*;
 
 
 public class CRCConverter {
+	
+	private static File userFile;
 
 	public static void main(String[] args) {
 
 		//set up the keyboard scanner
 		Scanner stdin = new Scanner(System.in);
-		
+
 		String pathname;
-		File userFile;
 		//make the user input filenames until we find one we like
 		while (true)
 		{
 			System.out.println("Please enter path/ name for file.");
 			pathname= stdin.next();
 			File tempFile= new File(pathname);
-			
+
 			if (tempFile.exists() == false)
 			{
-				System.out.println("Error: invalid pathname for file. Try again.");
+				System.out.println("Invalid pathname for file. Try again.");
 				continue;
 			}
 			else
@@ -68,11 +69,11 @@ public class CRCConverter {
 
 			//the user wants to calculate CRC, go do that
 			case 1:
-				//calculateCRC();
+				calculateCRC();
 
 				//go verify CRC
 			case 2:
-				//verifyCRC();
+				verifyCRC();
 
 				//exit the program normally
 			case 3:
@@ -88,5 +89,28 @@ public class CRCConverter {
 
 		}
 	}
+	
+	public static void calculateCRC()
+	{
 
+	}
+
+	public static void verifyCRC()
+	{
+
+	}
+	
+	public static String hexToBinary(String hexNumber)
+	{
+	    int temp = Integer.parseInt(hexNumber, 16);
+	    String binaryNumber = Integer.toBinaryString(temp);
+	    return binaryNumber;
+	}
+	
+	public static String binaryToHex (String binaryNumber)
+	{
+		int temp = Integer.parseInt(binaryNumber, 2);
+	    String hexNumber = Integer.toHexString(temp);
+		return hexNumber;
+	}
 }

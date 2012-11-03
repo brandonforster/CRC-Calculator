@@ -108,6 +108,8 @@ public class CRCConverter {
 		
 		//print out a binary representation of the input hex
 		printBinary(hexToBinary(getInputAsString()));
+		
+		
 	}
 
 	public static void verifyCRC()
@@ -186,5 +188,15 @@ public class CRCConverter {
 		int temp = Integer.parseInt(binaryNumber, 2);
 	    String hexNumber = Integer.toHexString(temp);
 		return hexNumber;
+	}
+	
+	public static String xor (String one, String two)
+	{
+		String output= "";
+		//magic number 4: length of standard binary number
+		for (int i= 0; i< 4; i++)
+			output= output + (one.charAt(i) ^ two.charAt(i));
+		
+		return output;
 	}
 }

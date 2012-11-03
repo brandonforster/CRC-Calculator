@@ -111,8 +111,15 @@ public class CRCConverter {
 		printInit();
 		
 		System.out.println("We will append eight zeros at the end of the binary input.\n");
+		String inputString= hexToBinary(getInputAsString() + "00000000");
 		
+		System.out.println("The The binary string answer at each XOR step of CRC calculation:");
 		
+		for (int i= 0; i< inputString.length()/BINARY_POLYNOMIAL.length(); i+= BINARY_POLYNOMIAL.length())
+		{
+			System.out.println(inputString);
+			xor(inputString.substring(beginIndex, endIndex))
+		}
 	}
 
 	public static void verifyCRC()

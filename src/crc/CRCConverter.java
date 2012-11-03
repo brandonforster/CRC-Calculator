@@ -14,8 +14,10 @@ import java.io.*;
 public class CRCConverter {
 
 	private static File userFile;
-	private final static String BINARY_POLYNOMIAL = "10000010110001001";
-
+	/*@TODO change this back */
+	//private final static String BINARY_POLYNOMIAL = "10000010110001001";
+	private final static String BINARY_POLYNOMIAL = "111111011";
+	
 	public static void main(String[] args) {
 
 		//set up the keyboard scanner
@@ -100,6 +102,8 @@ public class CRCConverter {
 			}
 
 		}
+
+		stdin.close();
 	}
 
 	public static void calculateCRC()
@@ -123,12 +127,15 @@ public class CRCConverter {
 				getInputAsString());
 
 		//print out a binary representation of the input hex
-		System.out.println("The input file (bin): \n");
+		System.out.println("The input file (bin): ");
 		printBinary(hexToBinary(getInputAsString()));
+		System.out.println("");
 
 		//print out polynomial used
-		System.out.println("The polynomial that was used "+
-				"(binary bit string): " + BINARY_POLYNOMIAL);
+		System.out.print("The polynomial that was used "+
+				"(binary bit string): ");
+		printBinary(BINARY_POLYNOMIAL);
+		System.out.println("");
 	}
 
 	public static String getInputAsString()
@@ -140,6 +147,8 @@ public class CRCConverter {
 			//while the scanner can find strings in the input.
 			while (scn.hasNext())
 				inputString = inputString + scn.next();
+			
+			scn.close();
 
 			//this should never run ever.
 		}	catch (FileNotFoundException e) {
@@ -164,12 +173,24 @@ public class CRCConverter {
 				//in valid ascii ranges
 				char check = hexScanner.next().toUpperCase().toCharArray()[0];
 				if (check < '0')
+				{
+					hexScanner.close();
 					return false;
+				}
 				else if (check > 'F')
+				{
+					hexScanner.close();
 					return false;
+				}
 				else if (check > '9' && check < 'A')
+				{
+					hexScanner.close();
 					return false;
+				}
 			}
+			
+			hexScanner.close();
+			
 			//if it passed above checks, it must be okay.
 			return true;
 
@@ -206,9 +227,10 @@ public class CRCConverter {
 
 	public static String xor (String one, String two)
 	{
+		int minLength= Math.min(one.length(), two.length());
 		String output= "";
 		//magic number 4: length of standard binary number
-		for (int i= 0; i< 4; i++)
+		for (int i= 0; i< minLength; i++)
 			output= output + (one.charAt(i) ^ two.charAt(i));
 
 		return output;

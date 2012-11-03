@@ -103,12 +103,28 @@ public class CRCConverter {
 	
 	public static void calculateCRC()
 	{
-
+		printInput();
 	}
 
 	public static void verifyCRC()
 	{
 
+	}
+	
+	public static void printInput()
+	{
+		try {
+			Scanner printScanner = new Scanner(userFile);
+			
+			//while the scanner can find strings in the input, print.
+			while (printScanner.hasNext())
+				System.out.print(printScanner.next());
+			
+			//this should never run ever.
+		}	catch (FileNotFoundException e) {
+			System.out.println("Something went wrong...");
+		}
+		
 	}
 	
 	public static boolean verifyFile(File input)

@@ -12,8 +12,9 @@ import java.io.*;
 
 
 public class CRCConverter {
-	
+
 	private static File userFile;
+	private final static String BINARY_POLYNOMIAL = "10000010110001001";
 
 	public static void main(String[] args) {
 
@@ -38,7 +39,7 @@ public class CRCConverter {
 			{
 				//if it does, copy the object to the file of higher scope.
 				userFile= tempFile;
-				
+
 				//verifyFile checks that the input is only hex characters.
 				//if it's not, it returns false and input loop begins again.
 				if (verifyFile(userFile) == true)
@@ -100,14 +101,12 @@ public class CRCConverter {
 
 		}
 	}
-	
+
 	public static void calculateCRC()
 	{
-		//print out the input file
-		System.out.println(getInputAsString());
+		printInit();
 		
-		//print out a binary representation of the input hex
-		printBinary(hexToBinary(getInputAsString()));
+		System.out.println("We will append eight zeros at the end of the binary input.\n");
 		
 		
 	}
@@ -116,34 +115,49 @@ public class CRCConverter {
 	{
 
 	}
-	
+
+	public static void printInit()
+	{
+		//print out the input file
+		System.out.println("The input file (hex): "+
+				getInputAsString());
+
+		//print out a binary representation of the input hex
+		System.out.println("The input file (bin): \n");
+		printBinary(hexToBinary(getInputAsString()));
+
+		//print out polynomial used
+		System.out.println("The polynomial that was used "+
+				"(binary bit string): " + BINARY_POLYNOMIAL);
+	}
+
 	public static String getInputAsString()
 	{
 		String inputString= "";
 		try {
 			Scanner scn = new Scanner(userFile);
-			
+
 			//while the scanner can find strings in the input.
 			while (scn.hasNext())
 				inputString = inputString + scn.next();
-			
+
 			//this should never run ever.
 		}	catch (FileNotFoundException e) {
 			System.out.println("Something went wrong...");
 		}
-		
+
 		return inputString;
 	}
-	
+
 	public static boolean verifyFile(File input)
 	{
 		try {
 			Scanner hexScanner = new Scanner(input);
-			
+
 			//changes the delimiter to the empty string so that .next()
 			//returns one character at a time.
 			hexScanner.useDelimiter("");
-			
+
 			while (hexScanner.hasNext() == true)
 			{
 				//converts the read in string to a char, then checks if it is
@@ -158,45 +172,45 @@ public class CRCConverter {
 			}
 			//if it passed above checks, it must be okay.
 			return true;
-			
+
 			//this should never run ever.
 		}	catch (FileNotFoundException e) {
 			System.out.println("Something went wrong...");
 			return false;
 		}
 	}
-	
+
 	public static String hexToBinary(String hexNumber)
 	{
-	    int temp = Integer.parseInt(hexNumber, 16);
-	    String binaryNumber = Integer.toBinaryString(temp);
-	    return binaryNumber;
+		int temp = Integer.parseInt(hexNumber, 16);
+		String binaryNumber = Integer.toBinaryString(temp);
+		return binaryNumber;
 	}
-	
+
 	public static void printBinary(String binaryNumber)
 	{
 		//uses regexes that I looked up how to do online to perform
 		//required ops.
 		binaryNumber= binaryNumber.replaceAll(".{32}", "$0\n");
 		binaryNumber= binaryNumber.replaceAll(".{4}", "$0 ");
-		
+
 		System.out.print(binaryNumber);
 	}
-	
+
 	public static String binaryToHex (String binaryNumber)
 	{
 		int temp = Integer.parseInt(binaryNumber, 2);
-	    String hexNumber = Integer.toHexString(temp);
+		String hexNumber = Integer.toHexString(temp);
 		return hexNumber;
 	}
-	
+
 	public static String xor (String one, String two)
 	{
 		String output= "";
 		//magic number 4: length of standard binary number
 		for (int i= 0; i< 4; i++)
 			output= output + (one.charAt(i) ^ two.charAt(i));
-		
+
 		return output;
 	}
 }

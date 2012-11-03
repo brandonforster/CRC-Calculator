@@ -120,6 +120,9 @@ public class CRCConverter {
 			while (printScanner.hasNext())
 				System.out.print(printScanner.next());
 			
+			//prints a newline because formatting.
+			System.out.println();
+			
 			//this should never run ever.
 		}	catch (FileNotFoundException e) {
 			System.out.println("Something went wrong...");
@@ -163,6 +166,16 @@ public class CRCConverter {
 	    int temp = Integer.parseInt(hexNumber, 16);
 	    String binaryNumber = Integer.toBinaryString(temp);
 	    return binaryNumber;
+	}
+	
+	public static void printBinary(String binaryNumber)
+	{
+		//uses regexes that I looked up how to do online to perform
+		//required ops.
+		binaryNumber= binaryNumber.replaceAll(".{32}", "$0\n");
+		binaryNumber= binaryNumber.replaceAll(".{4}", "$0 ");
+		
+		System.out.print(binaryNumber);
 	}
 	
 	public static String binaryToHex (String binaryNumber)

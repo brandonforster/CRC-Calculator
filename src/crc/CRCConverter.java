@@ -103,7 +103,11 @@ public class CRCConverter {
 	
 	public static void calculateCRC()
 	{
-		printInput();
+		//print out the input file
+		System.out.println(getInputAsString());
+		
+		//print out a binary representation of the input hex
+		printBinary(hexToBinary(getInputAsString()));
 	}
 
 	public static void verifyCRC()
@@ -111,23 +115,22 @@ public class CRCConverter {
 
 	}
 	
-	public static void printInput()
+	public static String getInputAsString()
 	{
+		String inputString= "";
 		try {
-			Scanner printScanner = new Scanner(userFile);
+			Scanner scn = new Scanner(userFile);
 			
-			//while the scanner can find strings in the input, print.
-			while (printScanner.hasNext())
-				System.out.print(printScanner.next());
-			
-			//prints a newline because formatting.
-			System.out.println();
+			//while the scanner can find strings in the input.
+			while (scn.hasNext())
+				inputString = inputString + scn.next();
 			
 			//this should never run ever.
 		}	catch (FileNotFoundException e) {
 			System.out.println("Something went wrong...");
 		}
 		
+		return inputString;
 	}
 	
 	public static boolean verifyFile(File input)

@@ -28,6 +28,7 @@ public class CRCConverter {
 			pathname= stdin.next();
 			File tempFile= new File(pathname);
 
+			//check to make sure that the file the user entered exists
 			if (tempFile.exists() == false)
 			{
 				System.out.println("Invalid pathname for file. Try again.");
@@ -35,8 +36,18 @@ public class CRCConverter {
 			}
 			else
 			{
+				//if it does, copy the object to the file of higher scope.
 				userFile= tempFile;
-				break;
+				
+				//verifyFile checks that the input is only hex characters.
+				//if it's not, it returns false and input loop begins again.
+				if (verifyFile(userFile) == true)
+					break;
+				else
+				{
+					System.out.println("Input is not in hexadecimal format.");
+					continue;
+				}
 			}
 		}
 
@@ -98,6 +109,37 @@ public class CRCConverter {
 	public static void verifyCRC()
 	{
 
+	}
+	
+	public static boolean verifyFile(File input)
+	{
+		try {
+			Scanner hexScanner = new Scanner(input);
+			
+			//changes the delimiter to the empty string so that .next()
+			//returns one character at a time.
+			hexScanner.useDelimiter("");
+			
+			while (hexScanner.hasNext() == true)
+			{
+				//converts the read in string to a char, then checks if it is
+				//in valid ascii ranges
+				char check = hexScanner.next().toUpperCase().toCharArray()[0];
+				if (check < '0')
+					return false;
+				else if (check > 'F')
+					return false;
+				else if (check > '9' && check < 'A')
+					return false;
+			}
+			//if it passed above checks, it must be okay.
+			return true;
+			
+			//this should never run ever.
+		}	catch (FileNotFoundException e) {
+			System.out.println("Something went wrong...");
+			return false;
+		}
 	}
 	
 	public static String hexToBinary(String hexNumber)

@@ -1,0 +1,1 @@
+This is a program for performing CRC encryption. Do not distribute, modify, tweak or in any way alter the code without citing the original author (Brandon Forster). Do not use it for any unallowed, illegal, or otherwise nefarious uses. No warranty or functionality is implied.

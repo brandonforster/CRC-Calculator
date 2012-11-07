@@ -201,7 +201,7 @@ public class CRCConverter {
 			//what we've already done + what got xor'd
 			printString= printString.substring(0, i)
 					+ xor(printString.substring(i,(BINARY_POLYNOMIAL.length() +i)), BINARY_POLYNOMIAL)
-					+ input.substring((BINARY_POLYNOMIAL.length()+ i));
+					+ binaryInput.substring((BINARY_POLYNOMIAL.length()+ i));
 			printBinary(printString);
 		}
 	}

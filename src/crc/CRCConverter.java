@@ -110,17 +110,25 @@ public class CRCConverter {
 	{
 		printInit();
 		
-		System.out.println("We will append eight zeros at the end of the binary input.\n");
+		System.out.println("We will append sixteen zeros at the end of the binary input.\n");
 		String inputString= hexToBinary(getInputAsString());
-		for (int i= 0; i< 4; i++)
-			inputString = inputString + "00000000";
+		inputString = inputString + "00000000";
 		
-		System.out.println("The The binary string answer at each XOR step of CRC calculation:");
+		System.out.println("The binary string answer at each XOR step of CRC calculation:");
 		
-		for (int i= 0; i< inputString.length()/BINARY_POLYNOMIAL.length(); i+= BINARY_POLYNOMIAL.length())
+		System.out.println(inputString);
+		String printString= "";
+		for (int i= 0; i< inputString.length(); i+= BINARY_POLYNOMIAL.length())
 		{
-			System.out.println(inputString);
-			//xor(inputString.substring(beginIndex, endIndex))
+			if (i+ BINARY_POLYNOMIAL.length() > inputString.length())
+			{
+				printString= printString + xor(inputString.substring(i), BINARY_POLYNOMIAL);
+				printBinary(printString);
+				break;
+			}
+			
+			printString= printString + xor(inputString.substring(i, i+ BINARY_POLYNOMIAL.length()), BINARY_POLYNOMIAL);
+			printBinary(printString + inputString.substring(i+BINARY_POLYNOMIAL.length()));
 		}
 	}
 

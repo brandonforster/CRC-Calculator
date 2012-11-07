@@ -17,7 +17,7 @@ public class CRCConverter {
 	/*@TODO change this back */
 	//private final static String BINARY_POLYNOMIAL = "10000010110001001";
 	private final static String BINARY_POLYNOMIAL = "111111011";
-	
+
 	public static void main(String[] args) {
 
 		//set up the keyboard scanner
@@ -109,22 +109,21 @@ public class CRCConverter {
 	public static void calculateCRC()
 	{
 		printInit();
-		
+
 		System.out.println("We will append sixteen zeros at the end of the binary input.\n");
 		String inputString= hexToBinary(getInputAsString());
 		inputString = inputString + "00000000";
-		
+
 		System.out.println("The binary string answer at each XOR step of CRC calculation:");
-		
+
 		printBinary(inputString);
-		System.out.println();
 		String printString= inputString;
-		
+
 		for (int i= 0; i< inputString.length(); i++)
 		{
 			if (printString.charAt(i)== '0')
 				continue;
-			
+
 			if ((BINARY_POLYNOMIAL.length() + i + 1 ) > printString.length())
 			{
 				printString= printString.substring(0, i)
@@ -132,12 +131,34 @@ public class CRCConverter {
 				printBinary(printString);
 				break;
 			}
-			
+
 			//what we've already done + what got xor'd
 			printString= printString.substring(0, i)
 					+ xor(printString.substring(i,(BINARY_POLYNOMIAL.length() +i)), BINARY_POLYNOMIAL)
 					+ inputString.substring((BINARY_POLYNOMIAL.length()+ i));
 			printBinary(printString);
+		}
+
+		//double reverse the string to get the checksum out
+		printString = reverse(printString);
+		printString = printString.substring(0, 16);
+		printString = reverse(printString);
+
+		System.out.print("Thus, the CRC is: (bin) ");
+		printBinary(printString);
+		System.out.println("which equals "+binaryToHex(printString)+ " (hex)");
+		System.out.println("Reading input file again: "+ getInputAsString() + binaryToHex(printString));
+
+		try{
+			BufferedWriter userFileWrite = new BufferedWriter(new FileWriter(userFile));
+			userFileWrite.write(getInputAsString() + binaryToHex(printString));
+			
+			System.out.println("Closing input file.");
+			userFileWrite.close();
+			
+			//this should never run ever.
+		}	catch (IOException e) {
+			System.out.println("Something went wrong...");
 		}
 	}
 
@@ -145,8 +166,8 @@ public class CRCConverter {
 	{
 
 	}
-	
-	
+
+
 
 	public static void printInit()
 	{
@@ -165,13 +186,6 @@ public class CRCConverter {
 		printBinary(BINARY_POLYNOMIAL);
 		System.out.println("");
 	}
-	
-	public static String reverse(String s) {
-	    if (s.length() <= 1) { 
-	        return s;
-	    }
-	    return reverse(s.substring(1, s.length())) + s.charAt(0);
-	}
 
 	public static String getInputAsString()
 	{
@@ -182,7 +196,7 @@ public class CRCConverter {
 			//while the scanner can find strings in the input.
 			while (scn.hasNext())
 				inputString = inputString + scn.next();
-			
+
 			scn.close();
 
 			//this should never run ever.
@@ -223,9 +237,9 @@ public class CRCConverter {
 					return false;
 				}
 			}
-			
+
 			hexScanner.close();
-			
+
 			//if it passed above checks, it must be okay.
 			return true;
 
@@ -248,16 +262,32 @@ public class CRCConverter {
 		//uses regexes that I looked up how to do online to perform
 		//required ops.
 		binaryNumber= binaryNumber.replaceAll(".{32}", "$0\n");
+
+		//does a double reverse to get proper formatting on bits
+		binaryNumber= reverse(binaryNumber);
 		binaryNumber= binaryNumber.replaceAll(".{4}", "$0 ");
+		binaryNumber= reverse(binaryNumber);
 
 		System.out.print(binaryNumber);
+
+		//some functionality that ensures there's always a newline
+		if (binaryNumber.length() < 32)
+			System.out.println("");
+	}
+
+	//reverses a string recursively
+	public static String reverse(String str) {
+		if (str.length() <= 1) { 
+			return str;
+		}
+		return reverse(str.substring(1, str.length())) + str.charAt(0);
 	}
 
 	public static String binaryToHex (String binaryNumber)
 	{
 		int temp = Integer.parseInt(binaryNumber, 2);
 		String hexNumber = Integer.toHexString(temp);
-		return hexNumber;
+		return hexNumber.toUpperCase();
 	}
 
 	public static String xor (String one, String two)

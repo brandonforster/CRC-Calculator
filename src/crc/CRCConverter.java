@@ -15,9 +15,7 @@ import java.math.BigInteger;
 public class CRCConverter {
 
 	private static File userFile;
-	/*@TODO change this back */
-	//private final static String BINARY_POLYNOMIAL = "10000010110001001";
-	private final static String BINARY_POLYNOMIAL = "111111011";
+	private final static String BINARY_POLYNOMIAL = "10000010110001001";
 
 	public static void main(String[] args) {
 
@@ -165,40 +163,57 @@ public class CRCConverter {
 
 	public static void verifyCRC()
 	{
+		//save the input to a string variable for manipulation
 		String input = getInputAsString();
+		
+		//output the input in various formats
 		System.out.println("The input file (hex): " + input);
 		System.out.print("The input file (bin): ");
 		printBinary(hexToBinary(input));
+		
+		//print the polynomial
 		System.out.print("The polynomial that we used (bin): ");
 		printBinary(BINARY_POLYNOMIAL);
 		
+		//do a double reverse to isolate the CRC
 		String crc= reverse(input);
-		crc= crc.substring(0, 2);
+		crc= crc.substring(0, 4);
 		crc= reverse(crc);
 		
+		//print out the CRC we isolated
 		System.out.print("The 16-bit CRC at the end of the file: (hex) "+ crc + "= ");
 		printBinary(hexToBinary(crc));
 		
+		//print the chart
 		System.out.println("The binary string answer at each XOR step of CRC verification:");
+		//since we print after a permute, do a print of the input to get step 0
 		printBinary(hexToBinary(input));
 		
+		//some variables that make our lives easier
 		String binaryInput = hexToBinary(input);
 		String printString = binaryInput;
 		
+		//build the chart
 		for (int i= 0; i< binaryInput.length(); i++)
 		{
+			//don't work on substrings that start with 0
 			if (printString.charAt(i)== '0')
 				continue;
 
+			//if we're at the end and don't want to run into a StringOutOfBounds
 			if ((BINARY_POLYNOMIAL.length() + i + 1 ) > printString.length())
 			{
+				//string we've processed thus far + xor processed
 				printString= printString.substring(0, i)
 						+ xor(printString.substring(i), BINARY_POLYNOMIAL);
 				printBinary(printString);
+				
+				//aaaaand we're done!
 				break;
 			}
 
-			//what we've already done + what got xor'd
+			//string we've processed thus far + xor processed
+			//+ whatever is past that that we haven't gotten to yet in the string
 			printString= printString.substring(0, i)
 					+ xor(printString.substring(i,(BINARY_POLYNOMIAL.length() +i)), BINARY_POLYNOMIAL)
 					+ binaryInput.substring((BINARY_POLYNOMIAL.length()+ i));
@@ -207,12 +222,14 @@ public class CRCConverter {
 		
 		boolean crcCheckPass = true;
 		
+		//if there is a 1 anywhere in the final string, the check did not pass.
 		for (int i= 0; i < printString.length(); i++)
 		{
 			if (printString.charAt(i) == '1')
 				crcCheckPass = false;
 		}
 		
+		//GET RESULTS.
 		System.out.print("\nDid the CRC check pass? (Yes or No): ");
 		if (crcCheckPass == true)
 			System.out.println("Yes");

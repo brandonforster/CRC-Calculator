@@ -204,6 +204,20 @@ public class CRCConverter {
 					+ binaryInput.substring((BINARY_POLYNOMIAL.length()+ i));
 			printBinary(printString);
 		}
+		
+		boolean crcCheckPass = true;
+		
+		for (int i= 0; i < printString.length(); i++)
+		{
+			if (printString.charAt(i) == '1')
+				crcCheckPass = false;
+		}
+		
+		System.out.print("\nDid the CRC check pass? (Yes or No): ");
+		if (crcCheckPass == true)
+			System.out.println("Yes");
+		else
+			System.out.println("No");
 	}
 
 

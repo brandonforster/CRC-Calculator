@@ -79,27 +79,25 @@ public class CRCConverter {
 				continue;
 			}
 
-			switch (userChoice){
-
 			//the user wants to calculate CRC, go do that
-			case 1:
+			if (userChoice == 1)
 				calculateCRC();
 
-				//go verify CRC
-			case 2:
+			//go verify CRC
+			else if (userChoice == 2)
 				verifyCRC();
 
-				//exit the program normally
-			case 3:
+			//exit the program normally
+			else if (userChoice == 3)
 				System.exit(0);
 
-				//tell the user they entered something weird
-			default:
+			//tell the user they entered something weird
+			else
 			{
 				System.out.println("Please enter a valid choice.\n");
 				continue;
 			}
-			}
+
 
 		}
 
@@ -112,7 +110,7 @@ public class CRCConverter {
 
 		System.out.println("We will append sixteen zeros at the end of the binary input.\n");
 		String inputString= hexToBinary(getInputAsString());
-		inputString = inputString + "00000000";
+		inputString = inputString + "0000000000000000";
 
 		System.out.println("The binary string answer at each XOR step of CRC calculation:");
 
@@ -152,14 +150,16 @@ public class CRCConverter {
 		try{
 			BufferedWriter userFileWrite = new BufferedWriter(new FileWriter(userFile));
 			userFileWrite.write(getInputAsString() + binaryToHex(printString));
-			
+
 			System.out.println("Closing input file.");
 			userFileWrite.close();
-			
+
 			//this should never run ever.
 		}	catch (IOException e) {
 			System.out.println("Something went wrong...");
 		}
+
+		return;
 	}
 
 	public static void verifyCRC()

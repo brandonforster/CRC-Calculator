@@ -116,19 +116,28 @@ public class CRCConverter {
 		
 		System.out.println("The binary string answer at each XOR step of CRC calculation:");
 		
-		System.out.println(inputString);
-		String printString= "";
-		for (int i= 0; i< inputString.length(); i+= BINARY_POLYNOMIAL.length())
+		printBinary(inputString);
+		System.out.println();
+		String printString= inputString;
+		
+		for (int i= 0; i< inputString.length(); i++)
 		{
-			if (i+ BINARY_POLYNOMIAL.length() > inputString.length())
+			if (printString.charAt(i)== '0')
+				continue;
+			
+			if ((BINARY_POLYNOMIAL.length() + i + 1 ) > printString.length())
 			{
-				printString= printString + xor(inputString.substring(i), BINARY_POLYNOMIAL);
+				printString= printString.substring(0, i)
+						+ xor(printString.substring(i), BINARY_POLYNOMIAL);
 				printBinary(printString);
 				break;
 			}
 			
-			printString= printString + xor(inputString.substring(i, i+ BINARY_POLYNOMIAL.length()), BINARY_POLYNOMIAL);
-			printBinary(printString + inputString.substring(i+BINARY_POLYNOMIAL.length()));
+			//what we've already done + what got xor'd
+			printString= printString.substring(0, i)
+					+ xor(printString.substring(i,(BINARY_POLYNOMIAL.length() +i)), BINARY_POLYNOMIAL)
+					+ inputString.substring((BINARY_POLYNOMIAL.length()+ i));
+			printBinary(printString);
 		}
 	}
 
@@ -136,6 +145,8 @@ public class CRCConverter {
 	{
 
 	}
+	
+	
 
 	public static void printInit()
 	{
@@ -153,6 +164,13 @@ public class CRCConverter {
 				"(binary bit string): ");
 		printBinary(BINARY_POLYNOMIAL);
 		System.out.println("");
+	}
+	
+	public static String reverse(String s) {
+	    if (s.length() <= 1) { 
+	        return s;
+	    }
+	    return reverse(s.substring(1, s.length())) + s.charAt(0);
 	}
 
 	public static String getInputAsString()

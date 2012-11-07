@@ -9,6 +9,7 @@ package crc;
 
 import java.util.*;
 import java.io.*;
+import java.math.BigInteger;
 
 
 public class CRCConverter {
@@ -164,7 +165,19 @@ public class CRCConverter {
 
 	public static void verifyCRC()
 	{
-
+		String input = getInputAsString();
+		System.out.println("The input file (hex): " + input);
+		System.out.print("The input file (bin): ");
+		printBinary(hexToBinary(input));
+		System.out.print("The polynomial that we used (bin): ");
+		printBinary(BINARY_POLYNOMIAL);
+		
+		String crc= reverse(input);
+		crc= crc.substring(0, 2);
+		crc= reverse(crc);
+		
+		System.out.print("The 16-bit CRC at the end of the file: (hex) "+ crc + "= ");
+		printBinary(hexToBinary(crc));
 	}
 
 
@@ -252,9 +265,9 @@ public class CRCConverter {
 
 	public static String hexToBinary(String hexNumber)
 	{
-		int temp = Integer.parseInt(hexNumber, 16);
-		String binaryNumber = Integer.toBinaryString(temp);
-		return binaryNumber;
+		hexNumber= hexNumber.toLowerCase();
+		BigInteger temp = new BigInteger(hexNumber, 16);
+		return temp.toString(2);
 	}
 
 	public static void printBinary(String binaryNumber)

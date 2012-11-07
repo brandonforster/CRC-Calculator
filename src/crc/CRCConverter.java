@@ -178,6 +178,32 @@ public class CRCConverter {
 		
 		System.out.print("The 16-bit CRC at the end of the file: (hex) "+ crc + "= ");
 		printBinary(hexToBinary(crc));
+		
+		System.out.println("The binary string answer at each XOR step of CRC verification:");
+		printBinary(hexToBinary(input));
+		
+		String binaryInput = hexToBinary(input);
+		String printString = binaryInput;
+		
+		for (int i= 0; i< binaryInput.length(); i++)
+		{
+			if (printString.charAt(i)== '0')
+				continue;
+
+			if ((BINARY_POLYNOMIAL.length() + i + 1 ) > printString.length())
+			{
+				printString= printString.substring(0, i)
+						+ xor(printString.substring(i), BINARY_POLYNOMIAL);
+				printBinary(printString);
+				break;
+			}
+
+			//what we've already done + what got xor'd
+			printString= printString.substring(0, i)
+					+ xor(printString.substring(i,(BINARY_POLYNOMIAL.length() +i)), BINARY_POLYNOMIAL)
+					+ input.substring((BINARY_POLYNOMIAL.length()+ i));
+			printBinary(printString);
+		}
 	}
 
 

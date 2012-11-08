@@ -149,7 +149,7 @@ public class CRCCalculator {
 
 		try{
 			BufferedWriter userFileWrite = new BufferedWriter(new FileWriter(userFile));
-			userFileWrite.write(getInputAsString() + binaryToHex(printString));
+			userFileWrite.write(binaryToHex(inputString) + binaryToHex(printString));
 
 			System.out.println("Closing input file.");
 			userFileWrite.close();

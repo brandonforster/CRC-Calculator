@@ -9,7 +9,7 @@ package crc;
 
 import java.util.*;
 import java.io.*;
-import java.math.BigInteger;
+import java.math.*;
 
 
 public class CRCCalculator {
@@ -100,6 +100,7 @@ public class CRCCalculator {
 
 		}
 
+		//we're done, close the scanner
 		stdin.close();
 	}
 
@@ -166,14 +167,14 @@ public class CRCCalculator {
 		//save the input to a string variable for manipulation
 		String input = getInputAsString();
 		
-		//output the input in various formats
-		System.out.println("The input file (hex): " + input);
-		System.out.print("The input file (bin): ");
-		printBinary(hexToBinary(input));
+		//print out the header
+		printInit();
 		
-		//print the polynomial
-		System.out.print("The polynomial that we used (bin): ");
-		printBinary(BINARY_POLYNOMIAL);
+		if (input.length() < 4)
+		{
+			System.out.println("Error: input too short. Terminating program.");
+			System.exit(1);
+		}
 		
 		//do a double reverse to isolate the CRC
 		String crc= reverse(input);
@@ -257,6 +258,7 @@ public class CRCCalculator {
 		System.out.println("");
 	}
 
+	//return a string representation of input
 	public static String getInputAsString()
 	{
 		String inputString= "";
@@ -277,6 +279,7 @@ public class CRCCalculator {
 		return inputString;
 	}
 
+	//make sure input is well formed.
 	public static boolean verifyFile(File input)
 	{
 		try {
@@ -320,13 +323,14 @@ public class CRCCalculator {
 		}
 	}
 
+	//convert hexadecimal to binary using BigInt
 	public static String hexToBinary(String hexNumber)
 	{
-		hexNumber= hexNumber.toLowerCase();
 		BigInteger temp = new BigInteger(hexNumber, 16);
 		return temp.toString(2);
 	}
 
+	//print binary numbers using the defined rules
 	public static void printBinary(String binaryNumber)
 	{
 		//uses regexes that I looked up how to do online to perform
@@ -353,18 +357,21 @@ public class CRCCalculator {
 		return reverse(str.substring(1, str.length())) + str.charAt(0);
 	}
 
+	//converts a binary string to hexadecimal
 	public static String binaryToHex (String binaryNumber)
 	{
-		int temp = Integer.parseInt(binaryNumber, 2);
-		String hexNumber = Integer.toHexString(temp);
-		return hexNumber.toUpperCase();
+		BigInteger temp = new BigInteger(binaryNumber, 2);
+		return temp.toString(16).toUpperCase();
 	}
 
+	//performs an exclusive or on two binary strings
 	public static String xor (String one, String two)
 	{
+		//operate based on the smallest string
 		int minLength= Math.min(one.length(), two.length());
 		String output= "";
-		//magic number 4: length of standard binary number
+		
+		//for each character in the string, do a bitwise XOR
 		for (int i= 0; i< minLength; i++)
 			output= output + (one.charAt(i) ^ two.charAt(i));
 

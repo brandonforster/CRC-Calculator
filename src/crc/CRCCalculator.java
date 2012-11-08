@@ -145,11 +145,12 @@ public class CRCCalculator {
 		System.out.print("Thus, the CRC is: (bin) ");
 		printBinary(printString);
 		System.out.println("which equals "+binaryToHex(printString)+ " (hex)");
-		System.out.println("Reading input file again: "+ getInputAsString() + binaryToHex(printString));
+		String input = getInputAsString();
+		System.out.println("Reading input file again: "+ input + binaryToHex(printString));
 
 		try{
 			BufferedWriter userFileWrite = new BufferedWriter(new FileWriter(userFile));
-			userFileWrite.write(binaryToHex(inputString) + binaryToHex(printString));
+			userFileWrite.write(input + binaryToHex(printString));
 
 			System.out.println("Closing input file.");
 			userFileWrite.close();
@@ -195,14 +196,14 @@ public class CRCCalculator {
 		String printString = binaryInput;
 		
 		//build the chart
-		for (int i= 0; i< binaryInput.length(); i++)
+		for (int i= 0; i< binaryInput.length() +1; i++)
 		{
 			//don't work on substrings that start with 0
 			if (printString.charAt(i)== '0')
 				continue;
 
 			//if we're at the end and don't want to run into a StringOutOfBounds
-			if ((BINARY_POLYNOMIAL.length() + i + 1 ) > printString.length())
+			if ((BINARY_POLYNOMIAL.length() + i) > printString.length())
 			{
 				//string we've processed thus far + xor processed
 				printString= printString.substring(0, i)
